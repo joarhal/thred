@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { realpathSync } from "node:fs";
+import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -7,13 +8,21 @@ import { Command } from "commander";
 
 import { registerExecuteCommand } from "./commands/execute.js";
 
+interface PackageMetadata {
+  version?: string;
+}
+
+const require = createRequire(import.meta.url);
+const packageMetadata = require("../package.json") as PackageMetadata;
+const cliVersion = typeof packageMetadata.version === "string" ? packageMetadata.version : "0.0.0";
+
 export function createProgram(): Command {
   const program = new Command();
 
   program
     .name("thred")
     .description("Codex-only autonomous execution from free-form task input")
-    .version("0.1.0");
+    .version(cliVersion);
 
   registerExecuteCommand(program);
   return program;
