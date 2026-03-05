@@ -197,6 +197,7 @@ describe("release npm artifact", () => {
     if (!isRecord(rawPackageJson)) {
       return;
     }
+    expect(rawPackageJson.name).toBe("@joarhal/thred");
 
     const binField = rawPackageJson.bin;
     expect(isRecord(binField)).toBe(true);

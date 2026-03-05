@@ -16,10 +16,10 @@ This scenario validates the package as a release artifact (tarball), not a direc
    - `npm run test:coverage`
    - `npm run build`
 2. Build release tarball in root:
-   - `rm -f thred-*.tgz`
+   - `rm -f *.tgz`
    - `npm pack`
-   - `tarball="$(pwd)/$(ls -1 thred-*.tgz | tail -n 1)"`
-   - `ls -1 thred-*.tgz`
+   - `tarball="$(pwd)/$(ls -1 *.tgz | tail -n 1)"`
+   - `ls -1 *.tgz`
 3. Create and enter temporary smoke app:
    - `tmpdir="$(mktemp -d)"`
    - `mkdir -p "$tmpdir/src" "$tmpdir/test"`
@@ -47,7 +47,7 @@ This scenario validates the package as a release artifact (tarball), not a direc
 
 ## Expected Artifacts
 
-- Root tarball exists: `thred-<version>.tgz`.
+- Root tarball exists: `<scope>-<package>-<version>.tgz` (for this repo: `joarhal-thred-<version>.tgz`).
 - Smoke app has installed package binary: `node_modules/.bin/thred`.
 - Smoke run artifacts exist under `.thred/artifacts/runs`:
   - `<run-id>.log`

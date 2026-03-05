@@ -1,7 +1,7 @@
 # thred
 
 [![CI](https://github.com/joarhal/thred/actions/workflows/ci.yml/badge.svg)](https://github.com/joarhal/thred/actions/workflows/ci.yml)
-[![npm version](https://img.shields.io/npm/v/thred.svg)](https://www.npmjs.com/package/thred)
+[![npm version](https://img.shields.io/npm/v/%40joarhal%2Fthred.svg)](https://www.npmjs.com/package/@joarhal/thred)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 `thred` is a Codex-driven CLI that turns free-form requirements into executable plans, runs them task-by-task, and enforces review gates before completion.
@@ -25,25 +25,25 @@
 Run directly from npm:
 
 ```bash
-npx thred --help
+npx @joarhal/thred --help
 ```
 
 Start interactive planning + execution in current repo:
 
 ```bash
-npx thred
+npx @joarhal/thred
 ```
 
 Create and run from inline requirement:
 
 ```bash
-npx thred "implement onboarding with email auth"
+npx @joarhal/thred "implement onboarding with email auth"
 ```
 
 Run non-interactive:
 
 ```bash
-npx thred "implement onboarding with email auth" --non-interactive
+npx @joarhal/thred "implement onboarding with email auth" --non-interactive
 ```
 
 ## Core Commands

@@ -1,5 +1,5 @@
 {
-  "name": "thred",
+  "name": "@joarhal/thred",
   "version": "0.1.2",
   "description": "Codex-only autonomous plan execution CLI",
   "license": "MIT",
