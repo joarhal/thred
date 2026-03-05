@@ -1,0 +1,58 @@
+{
+  "name": "thred",
+  "version": "0.1.0",
+  "description": "Codex-only autonomous plan execution CLI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joarhal/thred.git"
+  },
+  "bugs": {
+    "url": "https://github.com/joarhal/thred/issues"
+  },
+  "homepage": "https://github.com/joarhal/thred#readme",
+  "keywords": [
+    "cli",
+    "codex",
+    "plan-execution",
+    "automation",
+    "developer-tools"
+  ],
+  "type": "module",
+  "bin": {
+    "thred": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "npm run build && node dist/cli.js",
+    "build": "tsup && rm -rf dist/prompts && mkdir -p dist/prompts && cp -R src/core/codex/prompts/review-agents dist/prompts/review-agents",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@types/react": "^19.2.14",
+    "commander": "^14.0.1",
+    "ink": "^6.8.0",
+    "ink-markdown": "^1.0.4",
+    "react": "^19.2.4",
+    "yaml": "^2.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}
