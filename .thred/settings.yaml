@@ -1,0 +1,43 @@
+reviewPipeline:
+  version: 1
+  passes:
+    baseline_scan:
+      kind: scan
+      severities:
+        - critical
+        - high
+        - medium
+        - low
+      agents:
+        - implementation
+        - quality
+        - testing
+        - simplification
+        - documentation
+    stabilize:
+      kind: fix_loop
+      severities:
+        - critical
+        - high
+        - medium
+        - low
+      agents:
+        - implementation
+        - quality
+        - testing
+        - simplification
+      maxIterations: 4
+      patience: 2
+    final_gate:
+      kind: scan
+      severities:
+        - critical
+        - high
+        - medium
+        - low
+      agents:
+        - implementation
+        - quality
+        - testing
+        - simplification
+        - documentation
