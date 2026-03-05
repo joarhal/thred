@@ -1,3 +1,5 @@
+model: inherit
+reasoningEffort: high
 reviewPipeline:
   version: 1
   passes:
