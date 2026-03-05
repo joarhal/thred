@@ -5,7 +5,7 @@
 Current `vitest.config.ts` coverage scope:
 
 - Include: `src/**/*.ts`
-- Exclude: `test-projects/**`, `src/types.ts`, `src/types/**/*.d.ts`
+- Exclude: `src/types.ts`, `src/types/**/*.d.ts`
 
 Current global thresholds:
 
@@ -40,7 +40,7 @@ Summary of command exit codes:
 | Unit tests | Core units in `src/**` are covered and passing in mandatory test run. | `npm test`, suites in `tests/*` (module-level tests). | pass |
 | Integration tests | Cross-module execution paths pass, including pipeline/review/state integrations. | `npm test`, integration-oriented suites (`pipeline-*`, `review-*`, `execute-*`). | pass |
 | CLI tests | CLI contracts and command orchestration are validated in automated tests. | `npm test`, suites `tests/cli-*.test.ts`, `tests/execute-*.test.ts`. | pass |
-| E2E smoke (`test-projects/node-smoke-app`) | Pre-release smoke scenario succeeds in non-interactive mode against smoke project. | `docs/release/smoke.md` scenario and resulting `.thred` run artifacts in smoke app. | pending per release run |
+| E2E smoke | Pre-release smoke scenario succeeds in non-interactive mode against smoke project. | `docs/release/smoke.md` scenario and resulting `.thred` run artifacts in smoke app. | pending per release run |
 | Release artifact checks | Release tarball is buildable/installable and includes runnable `thred` binary. | `npm pack`/tarball smoke from `docs/release/smoke.md`; release evidence in checklist. | pending per release run |
 
 ## PLAN_PREPROD S1-S6 Alignment Snapshot

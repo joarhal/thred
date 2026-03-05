@@ -1,5 +1,5 @@
 import path from "node:path";
-import { chmod, cp, mkdtemp, mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
+import { chmod, mkdtemp, mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
 import os from "node:os";
 
 import { afterEach, describe, expect, it } from "vitest";
@@ -9,7 +9,6 @@ import { detectValidationCommands } from "../src/core/plan/validation-detect.js"
 import { runCommand } from "../src/core/util/process.js";
 
 describe("node smoke app integration", () => {
-  const fixtureCwd = path.resolve("test-projects/node-smoke-app");
   const originalCwd = process.cwd();
   const originalPath = process.env.PATH;
   const originalMode = process.env.THRED_TEST_CODEX_MODE;
@@ -28,17 +27,19 @@ describe("node smoke app integration", () => {
     }
   });
 
-  it("detects validation command from fixture package scripts", async () => {
-    const detection = await detectValidationCommands(fixtureCwd);
+  it("detects validation command from workspace package scripts", async () => {
+    const cwd = await createSmokeWorkspace();
+    const detection = await detectValidationCommands(cwd);
     expect(detection).toEqual({
       commands: ["npm test"],
       diagnostics: []
     });
   });
 
-  it("executes fixture validation command successfully", async () => {
+  it("executes workspace validation command successfully", async () => {
+    const cwd = await createSmokeWorkspace();
     const result = await runCommand("npm", ["test"], {
-      cwd: fixtureCwd,
+      cwd,
       timeoutMs: 30_000
     });
 
@@ -140,13 +141,67 @@ describe("node smoke app integration", () => {
 async function createSmokeWorkspace(): Promise<string> {
   const root = await mkdtemp(path.join(os.tmpdir(), "thred-node-smoke-"));
   const workspace = path.join(root, "node-smoke-app");
-  await mkdir(workspace, { recursive: true });
+  await mkdir(path.join(workspace, "src"), { recursive: true });
+  await mkdir(path.join(workspace, "test"), { recursive: true });
+  await mkdir(path.join(workspace, "docs", "plans"), { recursive: true });
 
-  await cp(path.join("test-projects", "node-smoke-app", "src"), path.join(workspace, "src"), { recursive: true });
-  await cp(path.join("test-projects", "node-smoke-app", "test"), path.join(workspace, "test"), { recursive: true });
-  await cp(path.join("test-projects", "node-smoke-app", "docs"), path.join(workspace, "docs"), { recursive: true });
-  await cp(path.join("test-projects", "node-smoke-app", "package.json"), path.join(workspace, "package.json"));
-  await cp(path.join("test-projects", "node-smoke-app", "package-lock.json"), path.join(workspace, "package-lock.json"));
+  await writeFile(
+    path.join(workspace, "src", "math.js"),
+    ["export function sum(a, b) {", "  return a + b;", "}", ""].join("\n"),
+    "utf8"
+  );
+
+  await writeFile(
+    path.join(workspace, "test", "math.test.js"),
+    [
+      "import assert from 'node:assert/strict';",
+      "import { test } from 'node:test';",
+      "import { sum } from '../src/math.js';",
+      "",
+      "test('sum adds numbers', () => {",
+      "  assert.equal(sum(2, 3), 5);",
+      "});",
+      ""
+    ].join("\n"),
+    "utf8"
+  );
+
+  await writeFile(
+    path.join(workspace, "docs", "plans", "2026-03-03-add-multiply.md"),
+    [
+      "# Plan: Add multiply",
+      "",
+      "## Overview",
+      "Add multiply helper and tests in the smoke workspace.",
+      "",
+      "## Validation Commands",
+      "- `npm test`",
+      "",
+      "### Task 1: Add multiply support",
+      "- [ ] Add `multiply` in `src/math.js`.",
+      "- [ ] Add multiply coverage in `test/math.test.js`.",
+      ""
+    ].join("\n"),
+    "utf8"
+  );
+
+  await writeFile(
+    path.join(workspace, "package.json"),
+    JSON.stringify(
+      {
+        name: "node-smoke-app",
+        version: "0.0.0",
+        type: "module",
+        private: true,
+        scripts: {
+          test: "node --test"
+        }
+      },
+      null,
+      2
+    ) + "\n",
+    "utf8"
+  );
 
   return workspace;
 }

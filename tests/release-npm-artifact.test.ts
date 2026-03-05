@@ -1,6 +1,6 @@
 import path from "node:path";
 import os from "node:os";
-import { chmod, cp, mkdtemp, mkdir, readFile, readdir, stat, writeFile } from "node:fs/promises";
+import { chmod, mkdtemp, mkdir, readFile, readdir, stat, writeFile } from "node:fs/promises";
 
 import { afterEach, describe, expect, it } from "vitest";
 
@@ -117,7 +117,7 @@ describe("release npm artifact", () => {
       const tarballPath = path.join(packDestination, packed.filename);
       await expect(stat(tarballPath)).resolves.toBeDefined();
 
-      const smokeCwd = await createSmokeWorkspace(repoRoot, tempRoot);
+      const smokeCwd = await createSmokeWorkspace(tempRoot);
 
       const installResult = await runCommand(
         "npm",
@@ -276,16 +276,48 @@ function coversPublishedPath(targetPath: string, publishedPaths: string[]): bool
   });
 }
 
-async function createSmokeWorkspace(repoRoot: string, tempRoot: string): Promise<string> {
+async function createSmokeWorkspace(tempRoot: string): Promise<string> {
   const workspace = path.join(tempRoot, "node-smoke-app");
-  await mkdir(workspace, { recursive: true });
+  await mkdir(path.join(workspace, "src"), { recursive: true });
+  await mkdir(path.join(workspace, "test"), { recursive: true });
+  await mkdir(path.join(workspace, "docs", "plans"), { recursive: true });
 
-  const fixtureRoot = path.join(repoRoot, "test-projects", "node-smoke-app");
-  await cp(path.join(fixtureRoot, "src"), path.join(workspace, "src"), { recursive: true });
-  await cp(path.join(fixtureRoot, "test"), path.join(workspace, "test"), { recursive: true });
-  await cp(path.join(fixtureRoot, "docs"), path.join(workspace, "docs"), { recursive: true });
-  await cp(path.join(fixtureRoot, "package.json"), path.join(workspace, "package.json"));
-  await cp(path.join(fixtureRoot, "package-lock.json"), path.join(workspace, "package-lock.json"));
+  await writeFile(
+    path.join(workspace, "src", "math.js"),
+    ["export function sum(a, b) {", "  return a + b;", "}", ""].join("\n"),
+    "utf8"
+  );
+  await writeFile(
+    path.join(workspace, "test", "math.test.js"),
+    [
+      "import assert from 'node:assert/strict';",
+      "import { test } from 'node:test';",
+      "import { sum } from '../src/math.js';",
+      "",
+      "test('sum adds numbers', () => {",
+      "  assert.equal(sum(2, 3), 5);",
+      "});",
+      ""
+    ].join("\n"),
+    "utf8"
+  );
+  await writeFile(
+    path.join(workspace, "package.json"),
+    JSON.stringify(
+      {
+        name: "node-smoke-app",
+        version: "0.0.0",
+        type: "module",
+        private: true,
+        scripts: {
+          test: "node --test"
+        }
+      },
+      null,
+      2
+    ) + "\n",
+    "utf8"
+  );
   await writeFile(path.join(workspace, ".gitignore"), "node_modules\n.thred\n.fake-bin\n.codex-state.json\n", "utf8");
 
   return workspace;

@@ -41,7 +41,7 @@ A release is complete only when all hard-blocker criteria below are satisfied.
 - Tarball smoke passed before release:
 - install from local tarball
 - `thred --help` works
-- smoke on `test-projects/node-smoke-app`
+- smoke on ephemeral Node.js smoke workspace
 - Post-publish verification passed:
 - clean install from npm
 - `thred --help` works

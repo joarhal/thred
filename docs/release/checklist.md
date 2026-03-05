@@ -6,7 +6,7 @@ Release must not proceed if any condition below is true:
 
 - Any `critical` or `high` finding exists in the latest review output (`.thred/artifacts/runs/*.review.json`) or `docs/release/stability-backlog.md`.
 - Any mandatory quality gate fails (`npm run lint`, `npm test`, `npm run test:coverage`, `npm run build`).
-- Pre-release smoke tarball scenario for `test-projects/node-smoke-app` fails (tarball build/install/CLI run/artifact verification).
+- Pre-release smoke tarball scenario fails (tarball build/install/CLI run/artifact verification).
 
 ## CI
 
@@ -38,7 +38,7 @@ Release must not proceed if any condition below is true:
 
 ## Smoke Scenario
 
-- [x] CLI smoke scenario documented for `test-projects/node-smoke-app`.
+- [x] CLI smoke scenario documented.
 - [x] Smoke instructions: `docs/release/smoke.md`.
 
 ## Local Quality Gates (pre-release)
@@ -64,4 +64,4 @@ Summary: [`docs/release/evidence/2026-03-05-quality-summary.env`](./evidence/202
 
 - Verdict: `NO-GO`
 - Date: `2026-03-05`
-- Reason: mandatory quality gates are green, but release remains blocked until E2E smoke (`test-projects/node-smoke-app`) and release artifact checks are completed and recorded as `pass` in `docs/release/stability-audit.md`.
+- Reason: mandatory quality gates are green, but release remains blocked until E2E smoke and release artifact checks are completed and recorded as `pass` in `docs/release/stability-audit.md`.
